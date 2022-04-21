@@ -7,9 +7,14 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "lib": ["esnext"],
     "outDir": "./build",
-    "rootDir": "src",
+    "rootDir": "src"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
