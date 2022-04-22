@@ -1,5 +1,5 @@
-import {IRegisterUserRequest} from "../interfaces/DTO/IRegisterUser";
-import {IUpdateUserRequest, IUpdateUserResponse} from "../interfaces/DTO/IUpdateUser";
+import IRegisterUserRequest from "../interfaces/DTO/IRegisterUser";
+import IUpdateUserRequest from "../interfaces/DTO/IUpdateUser";
 import IUserService from "../interfaces/services/IUserService";
 import IDeleteUser from "../interfaces/DTO/IDeleteUser";
 import IUserDTO from "../interfaces/DTO/IUserDTO";

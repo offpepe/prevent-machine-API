@@ -1,11 +1,5 @@
 
-export interface IRegisterUserResponse {
-    name: string,
-    email: string,
-    role: string,
-}
-
-export interface IRegisterUserRequest {
+export default interface IRegisterUserRequest {
     name: string,
     lastName: string,
     email: string,
