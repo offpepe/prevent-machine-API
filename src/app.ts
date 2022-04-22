@@ -3,6 +3,7 @@ import express, {Express, Request, Response} from 'express';
 import routes from "./routes";
 import dotenv from 'dotenv';
 import logger from 'morgan';
+import errorMiddleware from "./middlewares/errorMiddleware";
 
 dotenv.config()
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(logger('[server]: :method --> :status ::: :url (:response-time ms) ::: :localeDate'));
 
 app.use('/', routes);
+app.use(errorMiddleware);
 
 app.get('/', (_req: Request, res: Response) => res.send('Welcome to Prevent Machine API 🤖'));
 

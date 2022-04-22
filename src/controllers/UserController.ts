@@ -1,18 +1,17 @@
-import {Request, Response} from "express";
-import IUserDTO from "../interfaces/DTO/IUserDTO";
+import {NextFunction, Request, Response} from "express";
+import IUserDTO from "../models/interfaces/DTO/IUserDTO";
 import UserService from "../services/UserService";
 
 const service = new UserService()
 
 export default class UserController {
-    async RegisterUser(req: Request, res: Response): Promise<Response> {
+    async RegisterUser(req: Request, res: Response, next: NextFunction): Promise<Response> {
         try {
             const {name, lastName, email, password, companyId} = req.body;
             const response: IUserDTO = await service.Register({name, lastName, email, password, companyId});
             return res.status(201).json(response);
         } catch (e) {
-            console.error(`[server]: ERROR ON: ${e.stack} MESSAGE ::: ${e.message}`);
-            return res.status(500).json({error: 'internal error'});
+            next(e);
         }
     }
 
