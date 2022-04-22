@@ -10,5 +10,6 @@ router.post('/', controller.RegisterUser);
 router.get('/', controller.ListUsers);
 router.get('/:id', controller.GetUser);
 router.put('/:id', controller.UpdateUser);
+router.delete('/:id', controller.DeleteUser);
 
 export default router;

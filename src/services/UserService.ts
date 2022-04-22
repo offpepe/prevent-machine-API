@@ -17,6 +17,7 @@ export default class UserService implements IUserService {
                 company: true,
             }
         });
+        if (user === null) throw { code: 404, message: 'user not found' };
         return UserService.MapToDTO(user);
     }
 

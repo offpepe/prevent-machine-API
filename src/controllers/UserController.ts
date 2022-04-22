@@ -23,6 +23,7 @@ export default class UserController {
             return res.status(200).json(response);
         } catch (e) {
             console.error(e);
+            if (e.code) return res.status(e.code).json({ error: e.message });
             return res.status(500).json({error: 'internal error'});
         }
     }
@@ -43,6 +44,17 @@ export default class UserController {
             const { name, lastName, email, role } = req.body
             const response: IUserDTO = await service.UpdateUser({ name, lastName, email, role }, id);
             return res.status(200).json(response);
+        } catch (e) {
+            console.error(e);
+            return res.status(500).json({error: 'internal error'});
+        }
+    }
+
+    async DeleteUser(req: Request, res:Response) {
+        try {
+            const { id } = req.params;
+            const response = await service.DeleteUser(id);
+            res.status(200).json(response);
         } catch (e) {
             console.error(e);
             return res.status(500).json({error: 'internal error'});
