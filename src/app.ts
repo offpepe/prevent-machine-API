@@ -1,4 +1,6 @@
+import "reflect-metadata"
 import express, {Express, Request, Response} from 'express';
+import routes from "./routes";
 import dotenv from 'dotenv';
 import logger from 'morgan';
 
@@ -17,6 +19,8 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(logger('[server]: :method --> :status ::: :url (:response-time ms) ::: :localeDate'));
+
+app.use('/', routes);
 
 app.get('/', (_req: Request, res: Response) => res.send('Welcome to Prevent Machine API 🤖'));
 
