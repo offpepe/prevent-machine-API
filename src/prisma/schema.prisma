@@ -23,8 +23,8 @@ model User {
   password  String
   lastName  String
   role      Int
-  companyId String
-  company   Company @relation(fields: [companyId], references: [id])
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id])
 
   @@map("users")
 }
