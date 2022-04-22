@@ -1,6 +1,6 @@
 import express, {Request, Router} from "express";
 import UserController from "../controllers/UserController";
-import IUserService from "../interfaces/services/IUserService";
+import IUserService from "../models/interfaces/services/IUserService";
 import UserService from "../services/UserService";
 
 const controller = new UserController();

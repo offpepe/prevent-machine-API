@@ -1,11 +1,12 @@
-import IRegisterUserRequest from "../interfaces/DTO/IRegisterUser";
-import IUpdateUserRequest from "../interfaces/DTO/IUpdateUser";
-import IUserService from "../interfaces/services/IUserService";
-import IDeleteUser from "../interfaces/DTO/IDeleteUser";
-import IUserDTO from "../interfaces/DTO/IUserDTO";
+import IRegisterUserRequest from "../models/interfaces/DTO/IRegisterUser";
+import IUpdateUserRequest from "../models/interfaces/DTO/IUpdateUser";
+import IUserService from "../models/interfaces/services/IUserService";
+import IDeleteUser from "../models/interfaces/DTO/IDeleteUser";
+import IUserDTO from "../models/interfaces/DTO/IUserDTO";
 import prisma from "../prisma";
 import { injectable} from "tsyringe";
-import Roles from "../enums/Roles";
+import Roles from "../models/enums/Roles";
+import CustomError from "../utils/CustomError";
 
 @injectable()
 export default class UserService implements IUserService {
@@ -28,17 +29,21 @@ export default class UserService implements IUserService {
     }
 
     async Register({name, lastName, email, password, companyId }: IRegisterUserRequest): Promise<IUserDTO> {
-        const user = await prisma.user.create({
-            data: {
-                name,
-                lastName,
-                email,
-                password,
-                companyId,
-                role: 0,
-            }
-        });
-        return UserService.MapToDTO(user);
+        try {
+            const user = await prisma.user.create({
+                data: {
+                    name,
+                    lastName,
+                    email,
+                    password,
+                    companyId,
+                    role: 0,
+                }
+            });
+            return UserService.MapToDTO(user);
+        } catch (e) {
+            throw CustomError.Internal();
+        }
     }
 
     async DeleteUser(userId: string): Promise<IDeleteUser> {
