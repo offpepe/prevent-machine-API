@@ -9,12 +9,19 @@
     "esModuleInterop": true,
     "lib": ["esnext"],
     "outDir": "./build",
-    "rootDir": "src"
+    "rootDir": "src",
+    "noEmitHelpers":false,
+    "alwaysStrict": true,
+    "emitDecoratorMetadata":true,
+    "experimentalDecorators": true,
+    "diagnostics": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "compileOnSave":false
+
 }
