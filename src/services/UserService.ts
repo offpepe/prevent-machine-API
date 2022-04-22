@@ -5,6 +5,7 @@ import IDeleteUser from "../interfaces/DTO/IDeleteUser";
 import IUserDTO from "../interfaces/DTO/IUserDTO";
 import prisma from "../prisma";
 import { injectable} from "tsyringe";
+import Roles from "../enums/Roles";
 
 @injectable()
 export default class UserService implements IUserService {
@@ -75,7 +76,7 @@ export default class UserService implements IUserService {
             lastName,
             fullName: `${name} ${lastName}`,
             email,
-            role,
+            role: Roles[role],
         }
     }
 

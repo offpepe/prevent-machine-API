@@ -6,6 +6,6 @@ export default interface IUserDTO {
     name: string,
     lastName: string,
     fullName: string,
-    role: number,
+    role: string,
     company?: IGetCompany,
 }
