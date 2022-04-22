@@ -3,12 +3,13 @@ import IUpdateUserRequest from "../interfaces/DTO/IUpdateUser";
 import IUserService from "../interfaces/services/IUserService";
 import IDeleteUser from "../interfaces/DTO/IDeleteUser";
 import IUserDTO from "../interfaces/DTO/IUserDTO";
-import IUser from "../interfaces/entities/IUser";
 import prisma from "../prisma";
+import { injectable} from "tsyringe";
 
+@injectable()
 export default class UserService implements IUserService {
     async GetUser(userId: string): Promise<IUserDTO> {
-        const user: IUser = await prisma.User.findOne({
+        const user = await prisma.user.findUnique({
             where: {
                 id: userId,
             },
@@ -19,20 +20,20 @@ export default class UserService implements IUserService {
         return UserService.MapToDTO(user);
     }
 
-    async ListUsers(): Promise<[IUserDTO]> {
-        const users: [IUser] = await prisma.User.findMany();
-        const userDtos:[IUserDTO] = [undefined];
-        users.forEach((user) => userDtos.push(UserService.MapToDTO(user)));
-        return userDtos;
+    async ListUsers(): Promise<IUserDTO[]> {
+        const users = await prisma.user.findMany();
+        return users.map((user) => UserService.MapToDTO(user));
     }
 
-    async Register(userData: IRegisterUserRequest): Promise<IUserDTO> {
-        const user: IUser = await prisma.User.create({
+    async Register({name, lastName, email, password, companyId }: IRegisterUserRequest): Promise<IUserDTO> {
+        const user = await prisma.user.create({
             data: {
-                ...userData
-            },
-            include: {
-                company: userData.companyId
+                name,
+                lastName,
+                email,
+                password,
+                companyId,
+                role: 0,
             }
         });
         return UserService.MapToDTO(user);
@@ -40,7 +41,7 @@ export default class UserService implements IUserService {
 
     async DeleteUser(userId: string): Promise<IDeleteUser> {
         const user: IUserDTO = await this.GetUser(userId);
-        await prisma.User.delete({
+        await prisma.user.delete({
             where: {
                 id: user.id,
             }
@@ -51,24 +52,22 @@ export default class UserService implements IUserService {
         }
     }
 
-    async UpdateUser(userData: IUpdateUserRequest): Promise<IUserDTO> {
-        const user: IUser = await prisma.User.findUnique({
+    async UpdateUser({ name, lastName, email, role }: IUpdateUserRequest, userId: string): Promise<IUserDTO> {
+        const userUpdated = await prisma.user.update({
             where: {
-                email: userData.email,
-            }
-        });
-        const userUpdated: IUser = await prisma.User.update({
-            where: {
-                id: user.id,
+                id: userId,
             },
             data: {
-                ...userData,
+                name,
+                lastName,
+                email,
+                role,
             },
         });
         return UserService.MapToDTO(userUpdated);
     }
 
-    static MapToDTO({id, name, lastName, email, role, company}: IUser): IUserDTO {
+    static MapToDTO({id, name, lastName, email, role}): IUserDTO {
         return {
             id,
             name,
@@ -76,7 +75,6 @@ export default class UserService implements IUserService {
             fullName: `${name} ${lastName}`,
             email,
             role,
-            company,
         }
     }
 
