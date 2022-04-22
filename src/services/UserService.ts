@@ -51,8 +51,21 @@ export default class UserService implements IUserService {
         }
     }
 
-    UpdateUser(userData: IUpdateUserRequest): Promise<IUpdateUserResponse> {
-        return Promise.resolve(undefined);
+    async UpdateUser(userData: IUpdateUserRequest): Promise<IUserDTO> {
+        const user: IUser = await prisma.User.findUnique({
+            where: {
+                email: userData.email,
+            }
+        });
+        const userUpdated: IUser = await prisma.User.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                ...userData,
+            },
+        });
+        return UserService.MapToDTO(userUpdated);
     }
 
     static MapToDTO({id, name, lastName, email, role, company}: IUser): IUserDTO {
