@@ -4,10 +4,13 @@ import UserService from "../services/UserService";
 import CustomError from "../utils/CustomError";
 import {ObjectId} from "mongodb";
 import LoginResponse from "../models/DTO/LoginResponse";
+import BaseController from "./BaseController";
+import {autoInjectable} from "tsyringe";
+import CompanyController from "./CompanyController";
 
 const service = new UserService()
-
-export default class UserController {
+@autoInjectable()
+class UserController extends BaseController {
 
     async LoginUser(req: Request, res: Response, next: NextFunction) {
         try {
@@ -32,7 +35,7 @@ export default class UserController {
     async GetUser(req: Request, res: Response, next: NextFunction) {
         try {
             const {id} = req.params;
-            if (!ObjectId.isValid(id)) return next(CustomError.BadRequest('id needs to be a ObjectId'));
+            CompanyController.ValidateId(id);
             const response: IUserDTO = await service.GetUser(id);
             return res.status(200).json(response);
         } catch(e) {
@@ -52,6 +55,7 @@ export default class UserController {
     async UpdateUser(req: Request, res: Response, next: NextFunction) {
         try {
             const {id} = req.params;
+            CompanyController.ValidateId(id);
             const {name, lastName, email, role} = req.body
             const response: IUserDTO = await service.UpdateUser({name, lastName, email, role}, id);
             return res.status(200).json(response);
@@ -70,3 +74,5 @@ export default class UserController {
         }
     }
 }
+
+export default UserController;
