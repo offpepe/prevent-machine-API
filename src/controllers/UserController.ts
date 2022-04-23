@@ -3,10 +3,22 @@ import IUserDTO from "../models/interfaces/DTO/IUserDTO";
 import UserService from "../services/UserService";
 import CustomError from "../utils/CustomError";
 import {ObjectId} from "mongodb";
+import LoginResponse from "../models/DTO/LoginResponse";
 
 const service = new UserService()
 
 export default class UserController {
+
+    async LoginUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email, password } = req.body;
+            const response:LoginResponse = await service.Login(email, password);
+            return res.status(200).json(response);
+        } catch (e) {
+            return next(e);
+        }
+    }
+
     async RegisterUser(req: Request, res: Response, next: NextFunction) {
         try {
             const {name, lastName, email, password, companyId} = req.body;
