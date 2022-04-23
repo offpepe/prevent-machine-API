@@ -19,7 +19,7 @@ export default class UserService implements IUserService {
                 company: true,
             }
         });
-        if (user === null) throw { code: 404, message: 'user not found' };
+        if (user === null) throw CustomError.EntityNotFound('user not found');
         return UserService.MapToDTO(user);
     }
 
@@ -29,7 +29,6 @@ export default class UserService implements IUserService {
     }
 
     async Register({name, lastName, email, password, companyId }: IRegisterUserRequest): Promise<IUserDTO> {
-        try {
             const user = await prisma.user.create({
                 data: {
                     name,
@@ -41,9 +40,6 @@ export default class UserService implements IUserService {
                 }
             });
             return UserService.MapToDTO(user);
-        } catch (e) {
-            throw CustomError.Internal();
-        }
     }
 
     async DeleteUser(userId: string): Promise<IDeleteUser> {
