@@ -3,7 +3,7 @@ import express, {Express, Request, Response} from 'express';
 import routes from "./routes";
 import dotenv from 'dotenv';
 import logger from 'morgan';
-import errorMiddleware from "./middlewares/errorMiddleware";
+import errorMiddleware from "./middlewares/ErrorMiddleware";
 
 dotenv.config()
 
