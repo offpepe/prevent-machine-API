@@ -1,12 +1,11 @@
 
 export default class CustomError extends Error {
-    public code: number;
+    public status: number;
     public message: string;
-    public stack?: string;
-    constructor(code: number, message: string) {
+    constructor(status: number, message: string) {
         super(message);
         this.message = message;
-        this.code = code;
+        this.status = status;
     }
 
     public static EntityNotFound(message: string) {
