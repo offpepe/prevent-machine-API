@@ -22,8 +22,8 @@ app.use(express.urlencoded({extended: false}));
 app.use(logger('[server]: :method --> :status ::: :url (:response-time ms) ::: :localeDate'));
 
 app.use('/', routes);
-app.use(errorMiddleware);
 
 app.get('/', (_req: Request, res: Response) => res.send('Welcome to Prevent Machine API 🤖'));
+app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`[server] running on port ${PORT} using ${NODE_ENV} environment`));
