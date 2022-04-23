@@ -7,9 +7,23 @@ import prisma from "../prisma";
 import { injectable} from "tsyringe";
 import Roles from "../models/enums/Roles";
 import CustomError from "../utils/CustomError";
+import AuthHandler from "../utils/AuthHandler";
+import LoginResponse from "../models/DTO/LoginResponse";
 
 @injectable()
 export default class UserService implements IUserService {
+
+    async Login(email:string, password:string) : Promise<LoginResponse> {
+        const user = await prisma.user.findFirst({
+            where: {
+                AND: [{ email }, { password }]
+            },
+        });
+        if (!user) throw CustomError.Unauthorized('incorrect email or password');
+        const token = AuthHandler.GenerateToken(user.id, user.role);
+        return new LoginResponse(UserService.MapToDTO(user), token);
+    }
+
     async GetUser(userId: string): Promise<IUserDTO> {
         const user = await prisma.user.findUnique({
             where: {
