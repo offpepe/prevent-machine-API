@@ -8,5 +8,7 @@ const router = express.Router();
 router.get('/', authMiddleware, controller.ListCompanies);
 router.post('/', authMiddleware, controller.RegisterCompany);
 router.put('/:companyId', authMiddleware, controller.IncludeMembers);
+router.put('/remove-members/:companyId', authMiddleware, controller.RemoveMembers);
+
 
 export default router;
