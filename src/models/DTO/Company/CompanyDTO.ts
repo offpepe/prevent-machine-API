@@ -16,15 +16,18 @@ export default class CompanyDTO {
     }
 
     static MapToDTO({id, name, workers, description}: Company) {
-        const workersDTO: UserDTO[] = workers.map(({id, name, lastName, email, role, company}) =>
-            UserDTO.MapToDTO({
-                id,
-                name,
-                lastName,
-                email,
-                role,
-                company
-            }));
+        let workersDTO: UserDTO[] = [];
+        if (workers) {
+            workersDTO = workers.map(({id, name, lastName, email, role, company}) =>
+                UserDTO.MapToDTO({
+                    id,
+                    name,
+                    lastName,
+                    email,
+                    role,
+                    company
+                }));
+        }
         return new CompanyDTO(id, name, description, workersDTO);
     }
 }
