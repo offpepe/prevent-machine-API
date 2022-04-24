@@ -10,6 +10,7 @@ datasource db {
 model Company {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   name    String
+  description String?
   workers User[]
   units   Unit[]
 

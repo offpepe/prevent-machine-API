@@ -1,20 +1,21 @@
-import IUserDTO from "../interfaces/DTO/IUserDTO";
-import {UserDTO} from "./UserDTO";
-import Company from "../entities/Company";
-import User from "../entities/User";
+import IUserDTO from "../../interfaces/DTO/IUserDTO";
+import {UserDTO} from "../User/UserDTO";
+import Company from "../../entities/Company";
+import User from "../../entities/User";
 
 export default class CompanyDTO {
     companyId: string;
     name: string;
+    description?: string;
     workers: IUserDTO[];
 
-    constructor(companyId: string, name: string, workers: IUserDTO[]) {
+    constructor(companyId: string, name: string, description: string, workers: IUserDTO[]) {
         this.companyId = companyId;
         this.name = name;
         this.workers = workers;
     }
 
-    static MapToDTO({id, name, workers}: Company) {
+    static MapToDTO({id, name, workers, description}: Company) {
         const workersDTO: UserDTO[] = workers.map(({id, name, lastName, email, role, company}) =>
             UserDTO.MapToDTO({
                 id,
@@ -24,6 +25,6 @@ export default class CompanyDTO {
                 role,
                 company
             }));
-        return new CompanyDTO(id, name, workersDTO);
+        return new CompanyDTO(id, name, description, workersDTO);
     }
 }

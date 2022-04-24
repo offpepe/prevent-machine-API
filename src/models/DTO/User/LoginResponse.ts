@@ -1,4 +1,4 @@
-import IUserDTO from "../interfaces/DTO/IUserDTO";
+import IUserDTO from "../../interfaces/DTO/IUserDTO";
 
 export default class LoginResponse {
     public userData: IUserDTO;

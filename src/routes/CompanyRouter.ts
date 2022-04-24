@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.get('/', authMiddleware, controller.ListCompanies);
 router.post('/', authMiddleware, controller.RegisterCompany);
-router.put('/:companyId', authMiddleware, controller.IncludeMembers);
+router.put('/:companyId', authMiddleware, controller.UpdateCompany);
+router.put('/members/:companyId', authMiddleware, controller.IncludeMembers);
 router.put('/remove-members/:companyId', authMiddleware, controller.RemoveMembers);
 router.delete('/:companyId', authMiddleware, controller.DeleteCompany);
 

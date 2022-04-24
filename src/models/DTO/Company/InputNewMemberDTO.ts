@@ -1,4 +1,4 @@
-import Roles from "../enums/Roles";
+import Roles from "../../enums/Roles";
 
 export default class InputNewMemberDTO {
     id:string;

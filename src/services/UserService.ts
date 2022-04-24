@@ -7,8 +7,8 @@ import prisma from "../prisma";
 import { injectable} from "tsyringe";
 import CustomError from "../utils/CustomError";
 import AuthHandler from "../utils/AuthHandler";
-import LoginResponse from "../models/DTO/LoginResponse";
-import {UserDTO} from "../models/DTO/UserDTO";
+import LoginResponse from "../models/DTO/User/LoginResponse";
+import {UserDTO} from "../models/DTO/User/UserDTO";
 
 @injectable()
 export default class UserService implements IUserService {

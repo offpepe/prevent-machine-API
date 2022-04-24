@@ -2,7 +2,7 @@ import IRegisterUserRequest from "../DTO/IRegisterUser";
 import IUserDTO from "../DTO/IUserDTO";
 import IDeleteUser from "../DTO/IDeleteUser";
 import IUpdateUserRequest from "../DTO/IUpdateUser";
-import LoginResponse from "../../DTO/LoginResponse";
+import LoginResponse from "../../DTO/User/LoginResponse";
 
 export default interface IUserService {
     Login(email:string, password:string) : Promise<LoginResponse>;

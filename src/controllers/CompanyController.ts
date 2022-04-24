@@ -7,7 +7,7 @@ const service = new CompanyService();
 
 @autoInjectable()
 class CompanyController extends BaseController {
-    async RegisterCompany(req: Request, res: Response, next: NextFunction) {
+    public async RegisterCompany(req: Request, res: Response, next: NextFunction) {
         try {
             const {name, managerId} = req.body;
             CompanyController.ValidateId(managerId);
@@ -18,7 +18,7 @@ class CompanyController extends BaseController {
         }
     }
 
-    async IncludeMembers(req: Request, res: Response, next: NextFunction) {
+    public async IncludeMembers(req: Request, res: Response, next: NextFunction) {
         try {
             const {companyId} = req.params;
             const {tokenData: {userId}, newMembers} = req.body;
@@ -31,7 +31,7 @@ class CompanyController extends BaseController {
         }
     }
 
-    async ListCompanies(_req: Request, res: Response, next: NextFunction) {
+    public async ListCompanies(_req: Request, res: Response, next: NextFunction) {
         try {
             const companies = await service.ListAllMembers();
             return res.status(200).json(companies);
@@ -40,7 +40,7 @@ class CompanyController extends BaseController {
         }
     }
 
-    async RemoveMembers(req: Request, res: Response, next: NextFunction) {
+    public async RemoveMembers(req: Request, res: Response, next: NextFunction) {
         try {
             const {companyId} = req.params;
             const {tokenData: {userId}, members} = req.body;
@@ -51,7 +51,19 @@ class CompanyController extends BaseController {
         }
     }
 
-    async DeleteCompany(req: Request, res: Response, next: NextFunction) {
+    public async UpdateCompany(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { companyId } = req.params;
+            const { tokenData: { userId }, name, description } = req.body;
+            CompanyController.ValidateId(companyId);
+            const result = await service.UpdateCompany(companyId, userId, { name, description });
+            return res.status(200).json(result);
+        } catch (e) {
+            return next(e);
+        }
+    }
+
+    public async DeleteCompany(req: Request, res: Response, next: NextFunction) {
         try {
             const { companyId } = req.params;
             const { tokenData: { userId } } = req.body;
