@@ -5,6 +5,8 @@ import authMiddleware from "../middlewares/AuthMiddleware";
 const controller = new CompanyController();
 const router = express.Router();
 
+router.get('/', authMiddleware, controller.ListCompanies);
 router.post('/', authMiddleware, controller.RegisterCompany);
+router.put('/:companyId', authMiddleware, controller.IncludeMembers);
 
 export default router;
