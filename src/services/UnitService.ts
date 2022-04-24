@@ -6,6 +6,7 @@ import ReturningDataValidationOptions from "../models/DTO/Unit/ReturningDataVali
 import UnitDTO from "../models/DTO/Unit/UnitDTO";
 import RequesterData from "../models/DTO/Unit/RequesterData";
 import UpdateUnitDTO from "../models/DTO/Unit/UpdateUnitDTO";
+import Unit from "../models/entities/Unit";
 
 export default class UnitService {
     public async CreateUnit(reqData:RequesterData, unitData: InputUnitDTO ) {
@@ -40,6 +41,16 @@ export default class UnitService {
             }
         });
         return UnitDTO.MapToDTO(updated);
+    }
+
+    public async ListUnits() {
+        const units = await prisma.unit.findMany({ include: { owner: true, assets: true } });
+        return units.map((unit) => UnitDTO.MapToDTO(unit));
+    }
+
+    public async GetUnit(id: string) {
+        const unit = await prisma.unit.findUnique({ where: { id } ,include: { owner: true, assets: true } });
+        return UnitDTO.MapToDTO(unit);
     }
 
     protected async ValidateManagerCompany({ companyId, managerId }: RequesterData, options?: ReturningDataValidationOptions) {
