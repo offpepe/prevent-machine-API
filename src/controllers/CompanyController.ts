@@ -50,6 +50,18 @@ class CompanyController extends BaseController {
             return next(e);
         }
     }
+
+    async DeleteCompany(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { companyId } = req.params;
+            const { tokenData: { userId } } = req.body;
+            CompanyController.ValidateId(companyId);
+            const result = await service.DeleteCompany(companyId, userId);
+            return res.status(200).json(result);
+        } catch (e) {
+            return next(e);
+        }
+    }
 }
 
 export default CompanyController;
