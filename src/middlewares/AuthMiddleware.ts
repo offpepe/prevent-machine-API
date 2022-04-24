@@ -8,7 +8,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
         const { authorization } = req.headers;
         if (!authorization) throw CustomError.Unauthorized('token not provided');
         const { userId, role } = AuthHandler.ValidateToken(authorization);
-        req.body = { ...req.body, tokenDate: { userId, role } };
+        req.body = { ...req.body, tokenData: { userId, role } };
         next();
     } catch (e) {
         next(e);

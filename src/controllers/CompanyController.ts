@@ -16,6 +16,28 @@ class CompanyController extends BaseController {
             return next(e);
         }
     }
+
+    async IncludeMembers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { companyId } = req.params;
+            const { tokenData: { userId }, newMembers } = req.body;
+            CompanyController.ValidateId(companyId);
+            newMembers.forEach((member) => CompanyController.ValidateId(member));
+            const response = await service.IncludeMembersRange(userId, companyId, newMembers);
+            return res.status(200).json(response);
+        } catch (e) {
+            return next(e);
+        }
+    }
+
+    async ListCompanies(_req: Request, res:Response, next: NextFunction) {
+        try {
+            const companies = await service.ListAllMembers();
+            return res.status(200).json(companies);
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 export default CompanyController;
