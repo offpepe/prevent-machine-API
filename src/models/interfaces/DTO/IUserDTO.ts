@@ -1,4 +1,4 @@
-import IGetCompany from "./IGetCompany";
+import Company from "../../entities/Company";
 
 export default interface IUserDTO {
     id: string,
@@ -7,5 +7,5 @@ export default interface IUserDTO {
     lastName: string,
     fullName: string,
     role: string,
-    company?: IGetCompany,
+    company?: Company,
 }

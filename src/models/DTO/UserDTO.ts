@@ -1,5 +1,6 @@
 import IUserDTO from "../interfaces/DTO/IUserDTO";
 import Roles from "../enums/Roles";
+import Company from "../entities/Company";
 
 export class UserDTO implements IUserDTO {
     email: string;
@@ -8,8 +9,9 @@ export class UserDTO implements IUserDTO {
     lastName: string;
     name: string;
     role: string;
+    company?: Company;
 
-    static MapToDTO({id, name, lastName, email, role}): IUserDTO {
+    static MapToDTO({id, name, lastName, email, role, company}): UserDTO {
         return {
             id,
             name,
@@ -17,6 +19,7 @@ export class UserDTO implements IUserDTO {
             fullName: `${name} ${lastName}`,
             email,
             role: Roles[role],
+            company,
         }
     }
 
