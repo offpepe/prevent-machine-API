@@ -1,6 +1,6 @@
-import IUserDTO from "../interfaces/DTO/IUserDTO";
-import Roles from "../enums/Roles";
-import Company from "../entities/Company";
+import IUserDTO from "../../interfaces/DTO/IUserDTO";
+import Roles from "../../enums/Roles";
+import Company from "../../entities/Company";
 
 export class UserDTO implements IUserDTO {
     email: string;

@@ -1,9 +1,10 @@
 import prisma from "../prisma";
 import Roles from "../models/enums/Roles";
-import CompanyDTO from "../models/DTO/CompanyDTO";
+import CompanyDTO from "../models/DTO/Company/CompanyDTO";
 import CustomError from "../utils/CustomError";
-import InputNewMemberDTO from "../models/DTO/InputNewMemberDTO";
-import RemoveMembersResponse from "../models/DTO/RemoveMembersResponse";
+import InputNewMemberDTO from "../models/DTO/Company/InputNewMemberDTO";
+import RemoveMembersResponse from "../models/DTO/Company/RemoveMembersResponse";
+import UpdateCompanyDTO from "../models/DTO/Company/UpdateCompanyDTO";
 
 // TODO dependency injection HERE!
 export default class CompanyService {
@@ -62,7 +63,7 @@ export default class CompanyService {
         }
     }
 
-    async DeleteCompany(companyId:string, managerId:string) {
+    public async DeleteCompany(companyId:string, managerId:string) {
         try {
             await this.ValidateManager(managerId, companyId);
             await this.CompanyById(companyId);
@@ -77,6 +78,23 @@ export default class CompanyService {
             });
             return { message: 'company deleted successfully'};
         } catch (e) {
+            if (e instanceof CustomError) throw e;
+            throw CustomError.Internal();
+        }
+    }
+
+    public async UpdateCompany(companyId: string, managerId: string, updatedFields: UpdateCompanyDTO  ) {
+        try {
+            await this.CompanyById(companyId);
+            await this.ValidateManager(managerId, companyId);
+            const updated = await prisma.company.update({
+                where: { id: companyId },
+                data: { ...updatedFields },
+                include: { workers: true },
+            });
+            return CompanyDTO.MapToDTO(updated);
+        } catch (e) {
+            console.error(e)
             if (e instanceof CustomError) throw e;
             throw CustomError.Internal();
         }
@@ -130,7 +148,7 @@ export default class CompanyService {
                 role: Roles.companyManager,
             }
         });
-        if (!manager) throw CustomError.BadRequest('you need to be a manager to include members on company');
+        if (!manager) throw CustomError.BadRequest('you need to be a manager to update company data');
     }
 
     protected async CompanyById(companyId: string) {

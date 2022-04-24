@@ -3,7 +3,7 @@ import IUserDTO from "../models/interfaces/DTO/IUserDTO";
 import UserService from "../services/UserService";
 import CustomError from "../utils/CustomError";
 import {ObjectId} from "mongodb";
-import LoginResponse from "../models/DTO/LoginResponse";
+import LoginResponse from "../models/DTO/User/LoginResponse";
 import BaseController from "./BaseController";
 import {autoInjectable} from "tsyringe";
 import CompanyController from "./CompanyController";
