@@ -4,7 +4,7 @@ export default class Unit {
     id: string;
     name: string;
     description: string;
-    assets: any[];
+    assets?: any[];
     ownerId: string;
     owner: Company;
 }

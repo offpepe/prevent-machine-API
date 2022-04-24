@@ -4,5 +4,5 @@ export default class Company {
     id: string;
     name: string;
     description?: string;
-    workers: User[];
+    workers?: User[];
 }
