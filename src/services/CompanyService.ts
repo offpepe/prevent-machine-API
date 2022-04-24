@@ -62,6 +62,25 @@ export default class CompanyService {
         }
     }
 
+    async DeleteCompany(companyId:string, managerId:string) {
+        try {
+            await this.ValidateManager(managerId, companyId);
+            await this.CompanyById(companyId);
+            await prisma.user.updateMany({
+                where: { companyId, },
+                data: {
+                    companyId: null,
+                    role: Roles.unregistered,
+                }});
+            await prisma.company.delete({
+                where: { id: companyId },
+            });
+            return { message: 'company deleted successfully'};
+        } catch (e) {
+            if (e instanceof CustomError) throw e;
+            throw CustomError.Internal();
+        }
+    }
 
     protected async RemoveMember(companyId: string, userId: string) {
         const user = prisma.user.findFirst({
