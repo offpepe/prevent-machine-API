@@ -4,6 +4,9 @@ import BaseService from "./BaseService";
 import prisma from "../prisma";
 import AssetDTO from "../models/DTO/Asset/AssetDTO";
 import UpdateAssetDTO from "../models/DTO/Asset/UpdateAssetDTO";
+import ReturningDataValidationOptions from "../models/DTO/Unit/ReturningDataValidationOptions";
+import CustomError from "../utils/CustomError";
+import Roles from "../models/enums/Roles";
 
 export default class AssetService extends BaseService {
     public async CreateAsset(assetData: CreateAssetDTO, requestData: RequestData ) {
@@ -37,11 +40,11 @@ export default class AssetService extends BaseService {
         return AssetDTO.MapToDTO(updated);
     }
 
-    public async ListAssets(reqData: RequestData, unitId: string) {
+    public async ListAssets(reqData: RequestData) {
         await AssetService.ValidateManagerCompany(reqData);
         const assets = await prisma.asset.findMany({
             where: {
-                ownerId: unitId,
+                ownerId: reqData.ownerId,
             },
             include: {
                 owner: true,
