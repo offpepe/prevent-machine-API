@@ -15,7 +15,7 @@ export default class UnitController extends BaseController{
             const { tokenData: { userId: managerId }, name, description } = req.body;
             UnitController.ValidateId(companyId);
             UnitController.ValidateId(managerId);
-            const result = await service.CreateUnit({ companyId, managerId }, { name, description });
+            const result = await service.CreateUnit({ ownerId: companyId, managerId }, { name, description });
             return res.status(200).json(result);
         } catch (e) {
             next(e);
@@ -29,7 +29,7 @@ export default class UnitController extends BaseController{
             UnitController.ValidateId(companyId);
             UnitController.ValidateId(managerId);
             UnitController.ValidateId(unitId);
-            const result = await service.UpdateUnit({ companyId, managerId }, unitId, { name, description });
+            const result = await service.UpdateUnit({ ownerId: companyId, managerId }, unitId, { name, description });
             return res.status(200).json(result);
         } catch (e) {
             return next(e);
@@ -68,7 +68,7 @@ export default class UnitController extends BaseController{
             UnitController.ValidateId(companyId);
             UnitController.ValidateId(managerId);
             UnitController.ValidateId(unitId);
-            const response = await service.DeleteUnit(unitId, { managerId, companyId });
+            const response = await service.DeleteUnit(unitId, { managerId, ownerId: companyId });
             return res.status(200).json(response);
         } catch (e) {
             return next(e);

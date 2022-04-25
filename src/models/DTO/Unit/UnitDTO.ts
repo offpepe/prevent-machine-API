@@ -16,7 +16,7 @@ export default class UnitDTO {
         this.assets = assets;
     }
 
-    public static async MapToDTO({ id, name, description, owner, assets }: Unit) {
+    public static MapToDTO({ id, name, description, owner, assets }: Unit) {
         return new UnitDTO(id, name, description, CompanyDTO.MapToDTO(owner), assets);
     }
 }
