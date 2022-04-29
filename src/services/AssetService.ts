@@ -9,6 +9,8 @@ import assetStatus from "../models/enums/AssetStatus";
 import ReturningDataValidationOptions from "../models/DTO/Unit/ReturningDataValidationOptions";
 import CustomError from "../utils/CustomError";
 import Roles from "../models/enums/Roles";
+import * as querystring from "querystring";
+import DeleteResponseDTO from "../models/DTO/Unit/DeleteResponseDTO";
 
 export default class AssetService extends BaseService {
     public async CreateAsset(assetData: CreateAssetDTO, requestData: RequestData) {
