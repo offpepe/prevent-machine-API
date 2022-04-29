@@ -6,5 +6,5 @@ export default class Unit {
     description: string;
     assets?: any[];
     ownerId: string;
-    owner: Company;
+    owner?: Company;
 }
