@@ -2,6 +2,8 @@ import UnitDTO from "../Unit/UnitDTO";
 import * as stream from "stream";
 import Unit from "../../entities/Unit";
 import Asset from "../../entities/Asset";
+import UnitDTOTiny from "../Unit/UnitDTO.tiny";
+import AssetStatus from "../../enums/AssetStatus";
 
 export default class AssetDTO {
     id: string;
@@ -9,9 +11,9 @@ export default class AssetDTO {
     description: string;
     model: string;
     image: string;
-    status: number;
+    status: string;
     healthLevel: string;
-    owner: UnitDTO;
+    owner: UnitDTOTiny;
 
     constructor(id: string, name: string, description: string, model: string, image: string, status: number, healthLevel: number, owner: Unit) {
         this.id = id;
@@ -19,12 +21,12 @@ export default class AssetDTO {
         this.description = description;
         this.model = model;
         this.image = image;
-        this.status = status;
+        this.status = AssetStatus[status];
         this.healthLevel = `${(healthLevel * 100)}%`;
-        this.owner = UnitDTO.MapToDTO(owner);
+        this.owner = UnitDTOTiny.MapToDTO(owner);
     }
 
-    public static MapToDTO({ id, name, description, model, image, status, healthLevel, owner }: Asset) {
+public static MapToDTO({ id, name, description, model, image, status, healthLevel, owner }: Asset) {
         return new AssetDTO(id, name, description, model, image, status, healthLevel, owner);
     }
 }
