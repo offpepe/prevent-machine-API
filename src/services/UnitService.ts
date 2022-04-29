@@ -13,7 +13,7 @@ import BaseService from "./BaseService";
 export default class UnitService extends BaseService{
     public async CreateUnit(reqData:RequestData, unitData: InputUnitDTO ) {
         try {
-            await UnitService.ValidateManagerCompany(reqData);
+            await UnitService.ValidateManager(reqData);
             const unit = await prisma.unit.create({
                 data: {
                     ...unitData,
@@ -38,7 +38,7 @@ export default class UnitService extends BaseService{
     }
 
     public async UpdateUnit(reqData: RequestData, unitId: string, updatedData: UpdateUnitDTO) {
-        await UnitService.ValidateManagerCompany(reqData);
+        await UnitService.ValidateManager(reqData);
         const updated = await prisma.unit.update({
             where: {
                 id: unitId
@@ -74,7 +74,7 @@ export default class UnitService extends BaseService{
 
     public async DeleteUnit(id: string, reqData: RequestData) {
         try {
-            await UnitService.ValidateManagerCompany(reqData);
+            await UnitService.ValidateManager(reqData);
             await prisma.unit.delete({
                 where: {
                     id
