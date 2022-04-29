@@ -47,7 +47,7 @@ model Asset {
   model       String
   image       String
   status      Int
-  healthLevel Int
+  healthLevel Float
   ownerId     String
   owner       Unit   @relation(fields: [ownerId], references: [id])
   @@map("assets")
