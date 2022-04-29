@@ -9,9 +9,11 @@ import assetStatus from "../models/enums/AssetStatus";
 import ReturningDataValidationOptions from "../models/DTO/Unit/ReturningDataValidationOptions";
 import CustomError from "../utils/CustomError";
 import Roles from "../models/enums/Roles";
-import * as querystring from "querystring";
-import DeleteResponseDTO from "../models/DTO/Unit/DeleteResponseDTO";
+import EmailService from "./EmailService";
+import {UserDTO} from "../models/DTO/User/UserDTO";
+import UserDTOTiny from "../models/DTO/User/UserDTO.tiny";
 
+const emailService = new EmailService();
 export default class AssetService extends BaseService {
     public async CreateAsset(assetData: CreateAssetDTO, requestData: RequestData) {
         await this.ValidateManager(requestData);
@@ -85,19 +87,27 @@ export default class AssetService extends BaseService {
     }
 
     public async ChangeHealthLevel(healthLevel: number, assetId: string) {
+        const statusAsset = this.CalculateStatus(healthLevel);
+        console.log(assetId);
         const asset = await prisma.asset.update({
             where: {
                 id: assetId,
             },
             data: {
                 healthLevel: healthLevel,
-                status: this.CalculateStatus(healthLevel),
+                status: statusAsset,
             },
-            include: {
-                owner: true
-            }
+            include: { owner: { include: { owner: { include: { workers: true } } } } }
         });
-        return AssetDTO.MapToDTO(asset);
+        const assetDTO = AssetDTO.MapToDTO(asset);
+        if (statusAsset == AssetStatus.Alerting || statusAsset == AssetStatus.Stopped) {
+            const workers = asset.owner.owner.workers;
+            await Promise.all(workers.map(async (worker) => {
+                await emailService.SendWarningReport(UserDTOTiny.MapToDTO(worker), assetDTO);
+                return true;
+            }));
+        }
+        return assetDTO;
     }
 
     protected CalculateStatus(healthLevel: number) {
@@ -108,7 +118,7 @@ export default class AssetService extends BaseService {
 
     protected async ValidateManager({ownerId, managerId}: RequestData, options?: ReturningDataValidationOptions) {
         console.log(ownerId);
-        const unit = await prisma.unit.findUnique({ where: { id: ownerId }, include: { owner: { include: { workers: true } } } } );
+        const unit = await prisma.unit.findUnique({where: {id: ownerId}, include: {owner: {include: {workers: true}}}});
         if (!unit) throw CustomError.EntityNotFound('unit not found');
         if (!unit.owner.workers.some((worker) => worker.id === managerId))
             throw CustomError.BadRequest('you need to be a unitManager to update unit or asset data');
