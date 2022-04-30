@@ -10,7 +10,8 @@
     "start": "node build/app",
     "dev": "ts-node --files ./src/app.ts",
     "build": "rm -rf build && tsc && cd build && npx prisma generate ",
-    "test": "npm run tests"
+    "test": "npm run tests",
+    "postinstall": "cd src && npx prisma generate"
   },
   "author": "Alan Albuquerque F. Lopes",
   "license": "MIT",
