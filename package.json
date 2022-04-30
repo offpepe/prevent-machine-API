@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node build/app",
     "dev": "ts-node --files ./src/app.ts",
-    "build": "rm -rf build && tsc && cd build && npx prisma generate ",
+    "build": "rm -rf build && tsc && cd build",
     "test": "npm run tests",
     "postinstall": "cd src && npx prisma generate"
   },
