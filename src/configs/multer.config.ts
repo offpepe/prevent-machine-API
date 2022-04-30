@@ -8,7 +8,6 @@ const date = new Date().toLocaleDateString('pt-BR');
 
 AwsSdk.config.region = 'us-east-2';
 const s3Bucket = new AwsSdk.S3({});
-console.log(S3_BUCKET_NAME);
 const uploadAssetImage = multer({
     storage: multerS3({
         s3: s3Bucket,

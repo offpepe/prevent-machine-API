@@ -63,7 +63,6 @@ export default class AssetService extends BaseService {
     }
 
     public async GetAssetById(reqData: RequestData, id: string) {
-        console.log(reqData);
         await this.ValidateManager(reqData);
         const asset = await prisma.asset.findUnique({
             where: {
@@ -121,7 +120,6 @@ export default class AssetService extends BaseService {
     }
 
     protected async ValidateManager({ownerId, managerId}: RequestData, options?: ReturningDataValidationOptions) {
-        console.log(ownerId);
         const unit = await prisma.unit.findUnique({where: {id: ownerId}, include: {owner: {include: {workers: true}}}});
         if (!unit) throw CustomError.EntityNotFound('unit not found');
         if (!unit.owner.workers.some((worker) => worker.id === managerId))

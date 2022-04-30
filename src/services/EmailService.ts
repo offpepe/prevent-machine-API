@@ -27,7 +27,6 @@ export default class EmailService {
                 </ul>
                 <el>With care, Prevent Machine 🩺🤖</el>`,
        };
-       const response = await sgMail.send(email);
-        console.log(response);
+       await sgMail.send(email);
     }
 }
