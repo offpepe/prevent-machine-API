@@ -1,4 +1,4 @@
-name: build
+name: deploy
 
 env:
   NODE_ENV: 'development'
@@ -29,5 +29,11 @@ jobs:
       - name: build app
         run: npm run build
       - name: start cluster
-        run: npm start
-
+        run: npm build-test
+      - name: Deploy app
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+            heroku_app_name: "prevent-machine"
+            heroku_email: "alan.alb.flopes@gmail.com"
