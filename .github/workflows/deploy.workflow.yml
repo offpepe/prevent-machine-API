@@ -1,0 +1,39 @@
+name: deploy
+
+env:
+  NODE_ENV: 'development'
+  SECRET: '253a1d8a57ee433b40e2942e2ea264b7f99b9935abcfcf8a0fac06ebb46b6ad5'
+  DATABASE_URL: 'mongodb+srv://offpepe:al077afl@mongocluster.oex1m.mongodb.net/preventMachine?retryWrites: true&w: majority'
+  SENDGRID_API_KEY: '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'
+  S3_BUCKET_NAME: 'prevent-machine'
+  AWS_ACCESS_KEY_ID: 'AKIA35KST5Z3263BV7HZ'
+  AWS_SECRET_ACCESS_KEY: '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'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [17.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        run: npm install
+      - name: build app
+        run: npm run build
+      - name: start cluster
+        run: npm run build-test
+      - name: Deploy app
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+            heroku_app_name: "prevent-machine"
+            heroku_email: "alan.alb.flopes@gmail.com"
