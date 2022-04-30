@@ -8,7 +8,7 @@ import UpdateCompanyDTO from "../models/DTO/Company/UpdateCompanyDTO";
 
 // TODO dependency injection HERE!
 export default class CompanyService {
-    public async RegisterCompany(name: string, managerId: string) {
+    public async RegisterCompany(name: string, description: string, managerId: string) {
         const user = await prisma.user.findUnique({where: {id: managerId}});
         if (!user) throw CustomError.EntityNotFound('user does not exists');
         await prisma.user.update({
@@ -18,6 +18,7 @@ export default class CompanyService {
         const company = await prisma.company.create({
             data: {
                 name,
+                description,
                 workers: {
                     connect: {id: managerId}
                 }
@@ -30,41 +31,25 @@ export default class CompanyService {
     }
 
     public async IncludeMembersRange(managerId: string, companyId: string, newMembers: [InputNewMemberDTO]) {
-        try {
             await this.ValidateManager(managerId, companyId);
             await this.CompanyById(companyId);
             await Promise.all(newMembers.map(async (member) => this.IncludeMember(member, companyId)));
             return CompanyDTO.MapToDTO(await this.CompanyById(companyId));
-        } catch (e) {
-            console.error(e);
-            if (e instanceof CustomError) throw e;
-            throw CustomError.Internal();
-        }
     }
 
     public async ListAllMembers() {
-        try {
             const companies = await prisma.company.findMany({ include: { workers: true } });
             return await Promise.all<CompanyDTO>(companies.map((company) => CompanyDTO.MapToDTO(company)));
-        } catch (e) {
-            throw CustomError.Internal()
-        }
     }
 
     public async RemoveMembersRange(managerId: string, companyId: string, users: [string]) {
-        try {
             await this.ValidateManager(managerId, companyId);
             await this.CompanyById(companyId);
             await Promise.all(users.map((user) => this.RemoveMember(companyId, user)));
             return new RemoveMembersResponse('members removed sucessfully');
-        } catch (e) {
-            if (e instanceof CustomError) throw e;
-            throw CustomError.Internal();
-        }
     }
 
     public async DeleteCompany(companyId:string, managerId:string) {
-        try {
             await this.ValidateManager(managerId, companyId);
             await this.CompanyById(companyId);
             await prisma.user.updateMany({
@@ -77,14 +62,9 @@ export default class CompanyService {
                 where: { id: companyId },
             });
             return { message: 'company deleted successfully'};
-        } catch (e) {
-            if (e instanceof CustomError) throw e;
-            throw CustomError.Internal();
-        }
     }
 
     public async UpdateCompany(companyId: string, managerId: string, updatedFields: UpdateCompanyDTO  ) {
-        try {
             await this.CompanyById(companyId);
             await this.ValidateManager(managerId, companyId);
             const updated = await prisma.company.update({
@@ -93,30 +73,30 @@ export default class CompanyService {
                 include: { workers: true },
             });
             return CompanyDTO.MapToDTO(updated);
-        } catch (e) {
-            console.error(e)
-            if (e instanceof CustomError) throw e;
-            throw CustomError.Internal();
-        }
     }
 
     protected async RemoveMember(companyId: string, userId: string) {
-        const user = prisma.user.findFirst({
-            where: {
-                id: userId,
-                companyId: companyId,
-            }
-        });
-        if (!user) throw CustomError.BadRequest(`user ${userId} is not part of this company`);
-        await prisma.user.update({
-            where: {
-                id: userId,
-            },
-            data: {
-                companyId: null,
-                role: Roles.unregistered,
-            }
-        });
+        try {
+            const user = prisma.user.findFirst({
+                where: {
+                    id: userId,
+                    companyId: companyId,
+                }
+            });
+            if (!user) throw CustomError.BadRequest(`user ${userId} is not part of this company`);
+            await prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    companyId: null,
+                    role: Roles.unregistered,
+                }
+            });
+        } catch (e) {
+            if (e.code === 'P2025') throw CustomError.EntityNotFound(`user ${userId} not found`);
+            throw e;
+        }
     }
 
     protected async IncludeMember({ id, role }: InputNewMemberDTO, companyId: string) {
