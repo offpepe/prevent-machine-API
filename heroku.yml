@@ -4,7 +4,7 @@ setup:
 build:
   docker:
     web: Dockerfile
-    worker: worker/Dockerfile
+    worker: ./Dockerfile
   config:
     NODE_ENV: homolog
 release:
