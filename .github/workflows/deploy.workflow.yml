@@ -1,0 +1,23 @@
+name: deployment
+
+on:
+  push:
+    - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [17.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        run: npm install
+      - name: build app
+        run: npm build
+      - name: start cluster
+        run: npm start
+
