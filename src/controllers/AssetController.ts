@@ -5,11 +5,19 @@ import CustomError from "../utils/CustomError";
 const service = new AssetService()
 
 export default class AssetController {
-    public async CreateAsset(req: Request, res: Response, next: NextFunction) {
+    public async CreateAsset(req, res: Response, next: NextFunction) {
         try {
             const {unitId: ownerId} = req.params;
-            const {tokenData: {userId: managerId}, name, description, model, image, status, healthLevel} = req.body
-            const result = await service.CreateAsset({name, description, image, model, status, healthLevel}, {
+            const {tokenData: {userId: managerId}, name, description, model, status, healthLevel} = req.body
+            const {location: image} = req.file;
+            const result = await service.CreateAsset({
+                name,
+                description,
+                image,
+                model,
+                status: Number(status),
+                healthLevel: Number(healthLevel),
+            }, {
                 ownerId,
                 managerId
             });
@@ -23,7 +31,13 @@ export default class AssetController {
         try {
             const {unitId: ownerId, assetId} = req.params;
             const {tokenData: {userId: managerId}, name, description, model, image, status} = req.body
-            const result = await service.UpdateAsset(assetId, { managerId, ownerId}, { name, description, model, status, image });
+            const result = await service.UpdateAsset(assetId, {managerId, ownerId}, {
+                name,
+                description,
+                model,
+                status,
+                image
+            });
             return res.status(200).json(result);
         } catch (e) {
             return next(e);
@@ -32,9 +46,9 @@ export default class AssetController {
 
     public async ListAssets(req: Request, res: Response, next: NextFunction) {
         try {
-            const { unitId: ownerId } = req.params;
-            const { tokenData: { userId: managerId } } = req.body;
-            const result = await service.ListAssets({ managerId, ownerId });
+            const {unitId: ownerId} = req.params;
+            const {tokenData: {userId: managerId}} = req.body;
+            const result = await service.ListAssets({managerId, ownerId});
             return res.status(200).json(result);
         } catch (e) {
             return next(e);
@@ -43,20 +57,20 @@ export default class AssetController {
 
     public async GetAssetById(req: Request, res: Response, next: NextFunction) {
         try {
-            const { unitId: ownerId, assetId } = req.params;
-            const { tokenData: { userId: managerId } } = req.body;
-            const result = await service.GetAssetById({ ownerId, managerId }, assetId);
+            const {unitId: ownerId, assetId} = req.params;
+            const {tokenData: {userId: managerId}} = req.body;
+            const result = await service.GetAssetById({ownerId, managerId}, assetId);
             return res.status(200).json(result);
         } catch (e) {
             return next(e);
         }
     }
-    
+
     public async DeleteAsset(req: Request, res: Response, next: NextFunction) {
         try {
-            const { unitId: ownerId, assetId } = req.params;
-            const { tokenData: { userId: managerId } } = req.body;
-            const result = await service.DeleteAsset({ ownerId, managerId }, assetId);
+            const {unitId: ownerId, assetId} = req.params;
+            const {tokenData: {userId: managerId}} = req.body;
+            const result = await service.DeleteAsset({ownerId, managerId}, assetId);
             return res.status(200).json(result);
         } catch (e) {
             return next(e);
@@ -65,13 +79,13 @@ export default class AssetController {
 
     public async UpdateHealthLevel(req: Request, res: Response, next: NextFunction) {
         try {
-            const { assetId } = req.params;
-            const { healthLevel } = req.body;
+            const {assetId} = req.params;
+            const {healthLevel} = req.body;
             if (!healthLevel) throw CustomError.BadRequest("healthLevel required");
             const result = await service.ChangeHealthLevel(Number(healthLevel), assetId);
             return res.status(200).json(result);
         } catch (e) {
-            return next (e);
+            return next(e);
         }
     }
 }
