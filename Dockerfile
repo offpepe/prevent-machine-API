@@ -6,3 +6,5 @@ RUN npm install -g pm2
 RUN npm run build
 # note: i'm kind of lost
 CMD ["pm2-runtime", "./ecosystem.config.js"]
+EXPOSE 80
+EXPOSE 8080

@@ -1,7 +1,3 @@
-setup:
-  config:
-    NODE_ENV: homolog
-    S3_BUCKET_NAME: prevent-machine
 build:
   docker:
     web: Dockerfile
