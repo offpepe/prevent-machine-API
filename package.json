@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "npm i pm2 -g && pm2-runtime ecosystem.config.js",
-    "build-test": "npm i pm2 -g && pm2 start",
+    "cluster": "npm i pm2 -g && pm2 start",
     "dev": "ts-node --files ./src/app.ts",
     "build": "rm -rf build && tsc && cd build",
     "test": "npm run tests",
