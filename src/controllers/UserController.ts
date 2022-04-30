@@ -7,6 +7,7 @@ import LoginResponse from "../models/DTO/User/LoginResponse";
 import BaseController from "./BaseController";
 import {autoInjectable} from "tsyringe";
 import CompanyController from "./CompanyController";
+import User from "../models/entities/User";
 
 const service = new UserService()
 @autoInjectable()
@@ -35,7 +36,7 @@ class UserController extends BaseController {
     async GetUser(req: Request, res: Response, next: NextFunction) {
         try {
             const {id} = req.params;
-            CompanyController.ValidateId(id);
+            UserController.ValidateId(id);
             const response: IUserDTO = await service.GetUser(id);
             return res.status(200).json(response);
         } catch(e) {
@@ -55,7 +56,7 @@ class UserController extends BaseController {
     async UpdateUser(req: Request, res: Response, next: NextFunction) {
         try {
             const {id} = req.params;
-            CompanyController.ValidateId(id);
+            UserController.ValidateId(id);
             const {name, lastName, email, role} = req.body
             const response: IUserDTO = await service.UpdateUser({name, lastName, email, role}, id);
             return res.status(200).json(response);
@@ -67,6 +68,7 @@ class UserController extends BaseController {
     async DeleteUser(req: Request, res: Response, next: NextFunction) {
         try {
             const {id} = req.params;
+            UserController.ValidateId(id);
             const response = await service.DeleteUser(id);
             res.status(200).json(response);
         } catch (e) {

@@ -9,9 +9,8 @@ const service = new CompanyService();
 class CompanyController extends BaseController {
     public async RegisterCompany(req: Request, res: Response, next: NextFunction) {
         try {
-            const {name, managerId} = req.body;
-            CompanyController.ValidateId(managerId);
-            const response = await service.RegisterCompany(name, managerId);
+            const {name, description, tokenData: { userId }} = req.body;
+            const response = await service.RegisterCompany(name, description, userId);
             return res.status(201).json(response);
         } catch (e) {
             return next(e);
@@ -21,9 +20,8 @@ class CompanyController extends BaseController {
     public async IncludeMembers(req: Request, res: Response, next: NextFunction) {
         try {
             const {companyId} = req.params;
-            const {tokenData: {userId}, newMembers} = req.body;
             CompanyController.ValidateId(companyId);
-            newMembers.forEach((member) => CompanyController.ValidateId(member));
+            const {tokenData: {userId}, newMembers} = req.body;
             const response = await service.IncludeMembersRange(userId, companyId, newMembers);
             return res.status(200).json(response);
         } catch (e) {
@@ -43,7 +41,9 @@ class CompanyController extends BaseController {
     public async RemoveMembers(req: Request, res: Response, next: NextFunction) {
         try {
             const {companyId} = req.params;
+            CompanyController.ValidateId(companyId);
             const {tokenData: {userId}, members} = req.body;
+
             const result = await service.RemoveMembersRange(userId, companyId, members);
             return res.status(200).json(result);
         } catch (e) {
@@ -54,8 +54,8 @@ class CompanyController extends BaseController {
     public async UpdateCompany(req: Request, res: Response, next: NextFunction) {
         try {
             const { companyId } = req.params;
-            const { tokenData: { userId }, name, description } = req.body;
             CompanyController.ValidateId(companyId);
+            const { tokenData: { userId }, name, description } = req.body;
             const result = await service.UpdateCompany(companyId, userId, { name, description });
             return res.status(200).json(result);
         } catch (e) {
@@ -66,8 +66,8 @@ class CompanyController extends BaseController {
     public async DeleteCompany(req: Request, res: Response, next: NextFunction) {
         try {
             const { companyId } = req.params;
-            const { tokenData: { userId } } = req.body;
             CompanyController.ValidateId(companyId);
+            const { tokenData: { userId } } = req.body;
             const result = await service.DeleteCompany(companyId, userId);
             return res.status(200).json(result);
         } catch (e) {
