@@ -13,7 +13,7 @@ export default class EmailService {
 
     public async SendWarningReport(user: UserDTO, asset: AssetDTO) {
        const email = {
-           to: 'alan.alb.flopes@gmail.com',
+           to: user.email,
            from: 'alan.alb.flopes@gmail.com',
            subject: `[Prevent-Machine] ATTENTION! Asset ${asset.id} is ${asset.status}`,
            html: `<h3>Attention, the asset ${asset.id} is ${asset.status}</h3>
