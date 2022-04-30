@@ -38,23 +38,28 @@ export default class UnitService extends BaseService{
     }
 
     public async UpdateUnit(reqData: RequestData, unitId: string, updatedData: UpdateUnitDTO) {
-        await UnitService.ValidateManager(reqData);
-        const updated = await prisma.unit.update({
-            where: {
-                id: unitId
-            },
-            data: {
-                ...updatedData,
-            },
-            include: {
-                owner: {
-                    include: {
-                        workers: true
-                    }
+        try {
+            await UnitService.ValidateManager(reqData);
+            const updated = await prisma.unit.update({
+                where: {
+                    id: unitId
                 },
-            }
-        });
-        return UnitDTO.MapToDTO(updated);
+                data: {
+                    ...updatedData,
+                },
+                include: {
+                    owner: {
+                        include: {
+                            workers: true
+                        }
+                    },
+                }
+            });
+            return UnitDTO.MapToDTO(updated);
+        } catch (e) {
+            if (e.code === 'P2025') throw CustomError.EntityNotFound('unit does not exist');
+            throw e;
+        }
     }
 
     public async ListUnits(ownerId: string) {
