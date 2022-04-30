@@ -7,7 +7,7 @@
     "node": "17.x"
   },
   "scripts": {
-    "start": "node build/app",
+    "start": "npm i pm2 -g && pm2-runtime ecosystem.config.js",
     "dev": "ts-node --files ./src/app.ts",
     "build": "rm -rf build && tsc && cd build",
     "test": "npm run tests",
