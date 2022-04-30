@@ -7,8 +7,9 @@
     "node": "17.x"
   },
   "scripts": {
-    "start": "ts-node --files ./src/app.ts",
-    "build": "rm -rf build/ && prettier --write . && tsc",
+    "start": "node build/app",
+    "dev": "ts-node --files ./src/app.ts",
+    "build": "rm -rf build && tsc",
     "test": "npm run tests"
   },
   "author": "Alan Albuquerque F. Lopes",
