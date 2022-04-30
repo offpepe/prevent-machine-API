@@ -5,5 +5,5 @@ module.exports = [{
     watch: true,
     merge_logs: true,
     autorestart: true,
-    instances: 4
+    instances: 2
 }]
