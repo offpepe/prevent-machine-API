@@ -19,6 +19,7 @@
     "dotenv": "^16.0.0",
     "email-js": "^2.0.2",
     "express": "^4.17.3",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.5.0",
     "morgan": "^1.10.0",
