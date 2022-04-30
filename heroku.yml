@@ -1,0 +1,14 @@
+setup:
+  config:
+    S3_BUCKET_NAME: prevent-machine
+build:
+  docker:
+    web: Dockerfile
+    worker: worker/Dockerfile
+  config:
+    NODE_ENV: homolog
+release:
+  image: worker
+  command:
+    - ./deployment-tasks.sh
+
