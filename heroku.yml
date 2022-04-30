@@ -1,14 +1,9 @@
 setup:
   config:
+    NODE_ENV: homolog
     S3_BUCKET_NAME: prevent-machine
 build:
   docker:
     web: Dockerfile
     worker: ./Dockerfile
-  config:
-    NODE_ENV: homolog
-release:
-  image: worker
-  command:
-    - ./deployment-tasks.sh
 
