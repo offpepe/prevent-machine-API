@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node build/app",
     "dev": "ts-node --files ./src/app.ts",
-    "build": "rm -rf build && tsc",
+    "build": "npx prisma generate && rm -rf build && tsc",
     "test": "npm run tests"
   },
   "author": "Alan Albuquerque F. Lopes",
