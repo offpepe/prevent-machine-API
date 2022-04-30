@@ -87,27 +87,31 @@ export default class AssetService extends BaseService {
     }
 
     public async ChangeHealthLevel(healthLevel: number, assetId: string) {
-        const statusAsset = this.CalculateStatus(healthLevel);
-        console.log(assetId);
-        const asset = await prisma.asset.update({
-            where: {
-                id: assetId,
-            },
-            data: {
-                healthLevel: healthLevel,
-                status: statusAsset,
-            },
-            include: { owner: { include: { owner: { include: { workers: true } } } } }
-        });
-        const assetDTO = AssetDTO.MapToDTO(asset);
-        if (statusAsset == AssetStatus.Alerting || statusAsset == AssetStatus.Stopped) {
-            const workers = asset.owner.owner.workers;
-            await Promise.all(workers.map(async (worker) => {
-                await emailService.SendWarningReport(UserDTOTiny.MapToDTO(worker), assetDTO);
-                return true;
-            }));
+        try {
+            const statusAsset = this.CalculateStatus(healthLevel);
+            const asset = await prisma.asset.update({
+                where: {
+                    id: assetId,
+                },
+                data: {
+                    healthLevel: healthLevel,
+                    status: statusAsset,
+                },
+                include: { owner: { include: { owner: { include: { workers: true } } } } }
+            });
+            const assetDTO = AssetDTO.MapToDTO(asset);
+            if (statusAsset == AssetStatus.Alerting || statusAsset == AssetStatus.Stopped) {
+                const workers = asset.owner.owner.workers;
+                await Promise.all(workers.map(async (worker) => {
+                    await emailService.SendWarningReport(UserDTOTiny.MapToDTO(worker), assetDTO);
+                    return true;
+                }));
+            }
+            return assetDTO;
+        } catch (e) {
+            if (e.code === 'P2025') throw CustomError.EntityNotFound('asset not found');
+            throw e;
         }
-        return assetDTO;
     }
 
     protected CalculateStatus(healthLevel: number) {
