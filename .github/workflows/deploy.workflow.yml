@@ -3,6 +3,7 @@ name: build
 env:
   NODE_ENV: 'development'
   SECRET: '253a1d8a57ee433b40e2942e2ea264b7f99b9935abcfcf8a0fac06ebb46b6ad5'
+  DATABASE_URL: 'mongodb+srv://offpepe:al077afl@mongocluster.oex1m.mongodb.net/preventMachine?retryWrites: true&w: majority'
   SENDGRID_API_KEY: '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'
   S3_BUCKET_NAME: 'prevent-machine'
   AWS_ACCESS_KEY_ID: 'AKIA35KST5Z3263BV7HZ'
