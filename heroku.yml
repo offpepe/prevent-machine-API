@@ -7,7 +7,6 @@ build:
     worker: worker/Dockerfile
   config:
     NODE_ENV: homolog
-run: npm start
 release:
   image: worker
   command:
