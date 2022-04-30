@@ -6,20 +6,14 @@ import Roles from "../models/enums/Roles";
 
 export default class BaseService {
     protected static async ValidateManager({ ownerId, managerId }: RequestData, options?: ReturningDataValidationOptions) {
-        let owner = await prisma.company.findUnique({ where: { id: ownerId } });
-        if (!owner && options.include.unit) {
-            owner = await prisma.unit.findUnique({ where: { id: ownerId } });
-            if (!owner) throw CustomError.EntityNotFound('unit or company not found');
-        }  else {
-            throw CustomError.EntityNotFound('company not found');
-        }
-        const manager = await prisma.user.findFirst({
-            where: {
-                id: managerId,
-                OR: [{ role: Roles.companyManager }, { role: Roles.unitManager }],
-            }
-        });
-        if (!manager) throw CustomError.BadRequest('you need to be a unitManager to update unit or asset data');
+        const owner = await prisma.company.findUnique({ where: { id: ownerId }, include: { workers: true } });
+        if (!owner) throw CustomError.EntityNotFound('company not found');
+        const [manager] = owner
+            .workers.filter((worker) =>
+                worker.role === Roles.companyManager || worker.role === Roles.companyManager
+                && worker.id === managerId);
+        if (!manager)
+            throw CustomError.BadRequest('you need to be a unitManager to update unit or asset data');
         if (options?.return.company) return owner;
         if (options?.return.manager) return manager;
         return;
