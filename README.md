@@ -24,7 +24,9 @@ All user routes are documented into [app's postman](https://www.postman.com/inte
 
 ## Coming features
 
-- [ ] tests on application 🧪
+- [ ] unit tests 🧪
+- [ ] integration tests ⚗️
+- [ ] E2E tests (w/ postman) 👨‍🔬
 - [ ] docker compose 🚢
 - [ ] dependency injection 💉
 - [ ] swagger
