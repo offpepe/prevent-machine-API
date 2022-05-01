@@ -10,7 +10,6 @@ import ReturningDataValidationOptions from "../models/DTO/Unit/ReturningDataVali
 import CustomError from "../utils/CustomError";
 import Roles from "../models/enums/Roles";
 import EmailService from "./EmailService";
-import {UserDTO} from "../models/DTO/User/UserDTO";
 import UserDTOTiny from "../models/DTO/User/UserDTO.tiny";
 
 const emailService = new EmailService();
