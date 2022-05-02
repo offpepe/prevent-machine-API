@@ -18,7 +18,7 @@ All user routes are documented into [app's postman](https://www.postman.com/inte
 ## Features
 
 - Create, Read, Update and delete actions on Users, companies, units and assets
-- Saving images on cloud while create asset
+- Saving images on cloud while create asset (unavaiable until contract with aws be solved)
 - Send email to company members if some asset is alerting or stopped
 - Continious integration (building aplication before merge) and deliverty(deploying in heroku)
 
