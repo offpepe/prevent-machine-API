@@ -8,8 +8,7 @@ export default class AssetController {
     public async CreateAsset(req, res: Response, next: NextFunction) {
         try {
             const {unitId: ownerId} = req.params;
-            const {tokenData: {userId: managerId}, name, description, model, status, healthLevel} = req.body
-            const {location: image} = req.file;
+            const {tokenData: {userId: managerId}, name, description, model, status, healthLevel, image} = req.body
             const result = await service.CreateAsset({
                 name,
                 description,

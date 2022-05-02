@@ -11,7 +11,7 @@ const router: Router = Router();
 
 router.get('/:unitId', authMiddleware, controller.ListAssets);
 router.get('/:unitId/:assetId', authMiddleware, controller.GetAssetById);
-router.post('/:unitId', authMiddleware, uploadAssetImage, validateAssetPost, controller.CreateAsset);
+router.post('/:unitId', authMiddleware, validateAssetPost, controller.CreateAsset);
 router.put('/:unitId/:assetId', authMiddleware, validateAssetPut, controller.UpdateAsset);
 router.put('/:unitId/:assetId/healthLevel', authMiddleware, validateAssetHealthLevelPut, controller.UpdateHealthLevel);
 router.delete('/:unitId/:assetId', authMiddleware, controller.DeleteAsset);

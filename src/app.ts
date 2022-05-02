@@ -25,7 +25,9 @@ app.use(logger('[server]: :method --> :status ::: :url (:response-time ms) ::: :
 
 app.use('/', routes);
 
-app.get('/', (_req: Request, res: Response) => res.send('Welcome to Prevent Machine API 🤖'));
+app.get('/', (_req: Request, res: Response) => res.send(`<h1> Welcome to Prevent Machine API 🤖  </h1>
+<h2>Important: Cloud service provider is unavaible</h2>
+<p> We're working to solve this issue, for now, images from issues just receives URI </p>`));
 app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`[server] running on port ${PORT} using ${NODE_ENV} environment`));
