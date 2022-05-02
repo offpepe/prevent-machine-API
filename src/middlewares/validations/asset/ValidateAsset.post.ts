@@ -8,6 +8,7 @@ const schema = joi.object({
     model: joi.string().min(1).max(256).required(),
     status: joi.number().min(0).max(2).required(),
     healthLevel: joi.number().min(0).max(1).required(),
+    image: joi.string().uri().required(),
 });
 
 export default (req, _res: Response, next: NextFunction): void => {
